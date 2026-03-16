@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    display: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+@font-face {
+    font-family: "Showcard Gothic";
+    src: url("/fonts/FontsFree-Net-SHOWG.woff2") format("woff2"),
+         url("/fonts/FontsFree-Net-SHOWG.ttf") format("truetype");
+}
