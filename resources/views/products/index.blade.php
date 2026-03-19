@@ -10,11 +10,11 @@
         </h1>
 
 
-        <div class="grid grid-cols-4 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-10">
 
 
             <!-- Sidebar -->
-            <div class="col-span-1">
+            <div class="col-span-1 md:col-span-1">
 
                 <form method="GET" action="{{ route('products.index') }}" class="mb-8">
 
@@ -59,9 +59,9 @@
 
 
             <!-- Products -->
-            <div class="col-span-3">
+            <div class="col-span-1 md:col-span-3">
 
-                <div class="grid grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
 
                     @forelse ($products as $product)
 

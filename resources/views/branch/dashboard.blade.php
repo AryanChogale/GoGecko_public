@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <div class="min-h-screen bg-[#E9EFE5] py-10">
-        <div class="max-w-5xl mx-auto px-6">
+        <div class="max-w-6xl mx-auto px-6">
 
             @php
                 $branchId        = auth()->user()->branch_id;

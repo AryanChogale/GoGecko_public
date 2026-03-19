@@ -25,6 +25,7 @@
                     {{-- Search --}}
                     <form method="GET" action="{{ route('admin.products.index') }}" class="mb-6">
                         <input type="text"
+                               id="searchbar"
                                name="search"
                                value="{{ request('search') }}"
                                placeholder="Search..."

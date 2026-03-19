@@ -21,7 +21,9 @@
                 </div>
             @else
                 <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-green-100">
-                    <table class="w-full text-sm text-left">
+
+                    {{-- Desktop table --}}
+                    <table class="hidden md:table w-full text-sm text-left">
                         <thead class="bg-[#076807] text-green-100 uppercase text-xs">
                             <tr>
                                 <th class="px-6 py-3">Product</th>
@@ -48,17 +50,13 @@
                                     <td class="px-6 py-4 text-gray-900">₹{{ number_format($unitPrice, 2) }}</td>
                                     <td class="px-6 py-4 text-gray-900">
                                         <div class="flex items-center gap-3">
-                                            <button class="qty-minus rounded px-2 py-1 text-sm hover:bg-gray-100"
-                                                    data-product="{{ $item->product->id }}">-</button>
+                                            <button class="qty-minus rounded px-2 py-1 text-sm hover:bg-gray-100" data-product="{{ $item->product->id }}">-</button>
                                             <span id="qty-{{ $item->product->id }}">{{ $item->quantity }}</span>
-                                            <button class="qty-plus rounded px-2 py-1 text-sm hover:bg-gray-100"
-                                                    data-product="{{ $item->product->id }}">+</button>
+                                            <button class="qty-plus rounded px-2 py-1 text-sm hover:bg-gray-100" data-product="{{ $item->product->id }}">+</button>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-right font-medium text-gray-900">
-                                        <span id="total-{{ $item->product->id }}">
-                                            ₹{{ number_format($unitPrice * $item->quantity, 2) }}
-                                        </span>
+                                        <span id="total-{{ $item->product->id }}">₹{{ number_format($unitPrice * $item->quantity, 2) }}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -73,7 +71,57 @@
                         </tfoot>
                     </table>
 
-                    <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
+                    {{-- Mobile cards --}}
+                    <div class="md:hidden divide-y divide-gray-100">
+                        @foreach ($cartItems as $item)
+                            @php $unitPrice = $item->product->priceForBranch($branchId ?? null); @endphp
+                            <div id="row-{{ $item->product->id }}" class="p-4 flex items-center gap-3">
+
+                                {{-- Image --}}
+                                @if ($item->product->image_path)
+                                    @php
+                                        $imgSrc = Str::startsWith($item->product->image_path, 'http')
+                                            ? $item->product->image_path
+                                            : Storage::url($item->product->image_path);
+                                    @endphp
+                                    <img src="{{ $imgSrc }}" class="w-14 h-14 object-cover rounded-lg shrink-0">
+                                @endif
+
+                                {{-- Info --}}
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-medium text-gray-900 text-sm truncate">{{ $item->product->name }}</p>
+                                    <p class="text-[#076807] font-semibold text-sm mt-0.5">₹{{ number_format($unitPrice, 2) }}</p>
+
+                                    {{-- Qty controls --}}
+                                    <div class="flex items-center gap-3 mt-2">
+                                        <button class="qty-minus w-7 h-7 rounded-full bg-[#E9EFE5] text-[#076807] font-bold text-lg flex items-center justify-center hover:bg-[#076807] hover:text-white transition"
+                                                data-product="{{ $item->product->id }}">−</button>
+                                        <span id="qty-{{ $item->product->id }}" class="text-sm font-medium w-4 text-center">{{ $item->quantity }}</span>
+                                        <button class="qty-plus w-7 h-7 rounded-full bg-[#E9EFE5] text-[#076807] font-bold text-lg flex items-center justify-center hover:bg-[#076807] hover:text-white transition"
+                                                data-product="{{ $item->product->id }}">+</button>
+                                    </div>
+                                </div>
+
+                                {{-- Total --}}
+                                <div class="shrink-0 text-right">
+                                    <span id="total-{{ $item->product->id }}" class="font-bold text-gray-900 text-sm">
+                                        ₹{{ number_format($unitPrice * $item->quantity, 2) }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        @endforeach
+
+                        {{-- Mobile total --}}
+                        <div class="bg-[#076807] px-4 py-3 flex items-center justify-between">
+                            <span class="text-green-100 text-xs uppercase font-semibold">Total</span>
+                            <span id="cart-total" class="text-white font-bold text-sm">
+                                ₹{{ number_format($cartItems->sum(fn($i) => $i->product->priceForBranch($branchId ?? null) * $i->quantity), 2) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="px-4 md:px-6 py-4 border-t border-gray-100 flex justify-end">
                         @auth
                             @if (auth()->user()->isCustomer())
                                 <button onclick="openAddressPanel()"
@@ -84,7 +132,7 @@
                                 <a href="{{ route('login') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg text-sm transition">Login to Checkout</a>
                             @endif
                         @else
-                            <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg text-sm transition">Login to Checkout</a>
+                            <a href="{{ route('login') }}" class="bg-[#076807] hover:bg-green-900 text-white font-medium px-6 py-2 rounded-lg text-sm transition">Login to Checkout</a>
                         @endauth
                     </div>
                 </div>
