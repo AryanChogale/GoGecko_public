@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Register — GoGecko</title>
+    <title>Register - GoGecko</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -13,7 +13,7 @@
 
 <div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
 
-    {{-- Left — branding panel --}}
+    {{-- Left - branding panel --}}
     <div class="hidden md:flex flex-col justify-center gap-16 bg-[#076807] px-14 py-12">
 
         <div>
@@ -21,7 +21,7 @@
                 Join<br>GoGecko.
             </h1>
             <p class="text-green-300 text-base leading-relaxed max-w-xs">
-                Create your account and start procuring smarter — faster delivery, better products, all in one place.
+                Create your account and start procuring smarter - faster delivery, better products, all in one place.
             </p>
         </div>
 
@@ -42,7 +42,7 @@
 
     </div>
 
-    {{-- Right — form panel --}}
+    {{-- Right - form panel --}}
     <div class="flex flex-col justify-center px-8 sm:px-16 py-12 overflow-y-auto">
 
         <div class="max-w-md w-full mx-auto">

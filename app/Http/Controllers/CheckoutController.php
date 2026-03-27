@@ -30,14 +30,12 @@ class CheckoutController extends Controller
             abort(403);
         }
 
-        // Get branch from customer_profiles (assigned at registration)
         $profile  = DB::table('customer_profiles')
             ->where('user_id', auth()->id())
             ->first();
 
         $branchId = $profile?->selected_branch_id;
 
-        // Fallback: if no branch assigned yet, geocode and assign now
         if (!$branchId) {
             $user  = auth()->user();
             $state = $user->state ?? $address->state;
@@ -61,7 +59,6 @@ class CheckoutController extends Controller
             $closest  = app(\App\Services\GeoService::class)->closestBranch($branches, $coords['lat'], $coords['lng']);
             $branchId = $closest?->id;
 
-            // Save for future orders
             if ($branchId) {
                 DB::table('customer_profiles')
                     ->where('user_id', auth()->id())
@@ -87,17 +84,18 @@ class CheckoutController extends Controller
             return back()->with('error', 'Your cart is empty.');
         }
 
-        // Use branch-specific price for each product
         $total = $cartItems->sum(
             fn($item) => $item->product->priceForBranch($branchId) * $item->quantity
         );
 
+        // Create order as payment_pending - cart cleared & Twilio fires only after payment
         $order = Order::create([
-            'customer_id'  => auth()->id(),
-            'branch_id'    => $branchId,
-            'address_id'   => $address->id,
-            'total_amount' => $total,
-            'status'       => 'pending',
+            'customer_id'    => auth()->id(),
+            'branch_id'      => $branchId,
+            'address_id'     => $address->id,
+            'total_amount'   => $total,
+            'status'         => 'pending',
+            'payment_status' => 'pending',
         ]);
 
         foreach ($cartItems as $item) {
@@ -109,11 +107,6 @@ class CheckoutController extends Controller
             ]);
         }
 
-        CartItem::where('customer_id', auth()->id())->delete();
-
-        app(NotificationService::class)->sendOrderConfirmation($order);
-
-        return redirect()->route('customer.orders')
-            ->with('success', 'Order placed! Assigned to our ' . $branch->name . ' — ' . $branch->city . ' branch. Order #' . $order->id);
+        return redirect()->route('payment.checkout', $order);
     }
 }

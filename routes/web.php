@@ -10,6 +10,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\BranchController;
@@ -20,14 +21,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
     if (!Auth::check()) {
-        return view('dashboard'); // public dashboard page
+        return view('dashboard');
     }
 
     $user = Auth::user();
@@ -59,11 +59,9 @@ Route::middleware(['auth', 'role:admin'])
             return view('admin.dashboard');
         })->name('dashboard');
 
-        // Management routes
         Route::resource('products', AdminProductController::class)->except(['show']);
         Route::resource('branches', BranchController::class)->except(['show']);
 
-        // Price change requests
         Route::get('price-requests', [AdminPriceChangeRequestController::class, 'index'])->name('price-requests.index');
         Route::get('price-requests/history', [AdminPriceChangeRequestController::class, 'history'])->name('price-requests.history');
         Route::post('price-requests/{priceChangeRequest}/approve', [AdminPriceChangeRequestController::class, 'approve'])->name('price-requests.approve');
@@ -73,13 +71,11 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::resource('blogs', AdminBlogController::class)->except(['show']);
 
-        // Order management routes
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
         Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
         Route::post('/orders/{order}/approve-cancellation', [AdminOrderController::class, 'approveCancellation'])->name('orders.approveCancellation');
         Route::post('/orders/{order}/reject-cancellation', [AdminOrderController::class, 'rejectCancellation'])->name('orders.rejectCancellation');
 
-        //Admin Contact thingy
         Route::get('/contact', [AdminContactController::class, 'index'])->name('contact');
         Route::delete('/contact/{contactSubmission}', [AdminContactController::class, 'destroy'])->name('contact.destroy');
     });
@@ -95,7 +91,6 @@ Route::middleware(['auth', 'role:branch'])
             return view('branch.dashboard');
         })->name('dashboard');
 
-        // Price change requests
         Route::get('price-requests', [BranchPriceChangeRequestController::class, 'index'])->name('price-requests.index');
         Route::get('price-requests/create', [BranchPriceChangeRequestController::class, 'create'])->name('price-requests.create');
         Route::post('price-requests', [BranchPriceChangeRequestController::class, 'store'])->name('price-requests.store');
@@ -118,26 +113,46 @@ Route::middleware(['auth', 'role:customer'])
         Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('addresses.destroy');
         Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders');
         Route::post('/orders/{order}/cancel', [CustomerOrderController::class, 'requestCancellation'])->name('orders.cancel');
+    });
 
-        });
 Route::post('/checkout/select-address', [CheckoutController::class, 'selectAddress'])
     ->middleware(['auth', 'role:customer'])
     ->name('checkout.selectAddress');
+
+// ─── Payment (Square) ──────────────────────────────────────────────────────────
+Route::middleware(['auth', 'role:customer'])
+    ->prefix('payment')
+    ->name('payment.')
+    ->group(function () {
+        // Redirects customer to Square's hosted checkout page
+        Route::get('/checkout/{order}', [PaymentController::class, 'checkout'])->name('checkout');
+        // Square redirects back here after payment
+        Route::get('/success', [PaymentController::class, 'success'])->name('success');
+        // Payment failure page
+        Route::get('/failed/{order}', [PaymentController::class, 'failed'])->name('failed');
+    });
+
+
+// ─── Payment (Square) ──────────────────────────────────────────────────────────
+Route::middleware(['auth', 'role:customer'])->group(function () {
+    Route::get('/payment/{order}', [\App\Http\Controllers\PaymentController::class, 'checkout'])->name('payment.checkout');
+    Route::post('/payment/{order}/process', [\App\Http\Controllers\PaymentController::class, 'process'])->name('payment.process');
+});
+
 require __DIR__.'/auth.php';
 
-
-//blog
+// Blog
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
 
-//products and cart
+// Products and cart
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/update', [CartController::class, 'updateQuantity']);
 
-//contact
+// Contact
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 

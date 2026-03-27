@@ -177,7 +177,7 @@ class CartController extends Controller
             ]);
         }
 
-        // Guest cart — no branch, use global price
+        // Guest cart - no branch, use global price
         $cart = session()->get('guest_cart', []);
 
         if (!isset($cart[$productId])) return response()->json([]);

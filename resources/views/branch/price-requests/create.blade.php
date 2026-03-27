@@ -41,7 +41,7 @@
                                     </label>
                                     <select name="product_id" required
                                             class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9]">
-                                        <option value="">— Select a product —</option>
+                                        <option value="">- Select a product -</option>
                                         @foreach ($products as $product)
                                             <option value="{{ $product->id }}"
                                                     {{ old('product_id') == $product->id ? 'selected' : '' }}>
@@ -74,7 +74,7 @@
                             <textarea name="reason" rows="5" required
                                       placeholder="Explain why this price change is needed..."
                                       class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9] resize-none">{{ old('reason') }}</textarea>
-                            <p class="text-xs text-gray-400 mt-2">Max 1000 characters. Be specific — admin will review this before approving.</p>
+                            <p class="text-xs text-gray-400 mt-2">Max 1000 characters. Be specific - admin will review this before approving.</p>
                         </div>
 
                     </div>

@@ -29,7 +29,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400">Branch</p>
-                                <p class="text-sm text-gray-700">{{ $order->branch->name }} — {{ $order->branch->city }}</p>
+                                <p class="text-sm text-gray-700">{{ $order->branch->name }} - {{ $order->branch->city }}</p>
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400">Total</p>

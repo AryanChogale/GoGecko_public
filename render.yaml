@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: gogecko
+    runtime: docker
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production

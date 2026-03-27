@@ -362,8 +362,48 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     </footer>
 
-    </body>
-</html>
+    {{-- Loading overlay --}}
+<div id="loading-overlay" class="fixed inset-0 bg-[#E9EFE5] z-[9999] flex items-center justify-center hidden">
+    <div class="flex flex-col items-center gap-4">
+        <img src="{{ asset('storage/logo/logo.png') }}" alt="GoGecko" class="h-16 animate-pulse">
+        <div class="w-8 h-8 border-4 border-[#076807] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+</div>
+
+<script>
+    const overlay = document.getElementById('loading-overlay');
+
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        // Skip if it's an external link, anchor, or has target="_blank"
+        if (
+            !link.href ||
+            link.href.startsWith('mailto:') ||
+            link.href.startsWith('tel:') ||
+            link.href.startsWith('#') ||
+            link.target === '_blank' ||
+            link.href === window.location.href ||
+            link.getAttribute('href') === '#'
+        ) return;
+
+        // Skip logout forms and AJAX links
+        if (link.closest('form')) return;
+
+        overlay.classList.remove('hidden');
+    });
+
+    // Hide overlay when page finishes loading
+    window.addEventListener('pageshow', function() {
+        overlay.classList.add('hidden');
+    });
+
+    // Also hide on back/forward navigation
+    window.addEventListener('popstate', function() {
+        overlay.classList.add('hidden');
+    });
+</script>
 
     </body>
 </html>

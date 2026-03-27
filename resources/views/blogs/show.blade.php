@@ -41,7 +41,7 @@
 
             <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mt-4">
 
-                {{-- Hero image — only if exists --}}
+                {{-- Hero image - only if exists --}}
                 @if ($blog->image_path)
                     <img src="{{ Storage::url($blog->image_path) }}"
                          alt="{{ $blog->title }}"

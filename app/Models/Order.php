@@ -11,15 +11,18 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'customer_id',
-        'branch_id',
-        'address_id',
-        'total_amount',
-        'status',
-        'cancellation_requested',
-        'cancellation_status',
-    ];
+protected $fillable = [
+    'customer_id',
+    'branch_id',
+    'address_id',
+    'total_amount',
+    'status',
+    'cancellation_requested',
+    'cancellation_status',
+    'square_order_id',      // add this
+    'square_payment_id',    // add this
+    'payment_status',       // add this
+];
 
     public function customer(): BelongsTo
     {

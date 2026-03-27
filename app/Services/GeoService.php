@@ -65,7 +65,7 @@ class GeoService
 
             $suggestions = [];
             foreach ($results as $result) {
-                // Only return cities, towns, villages — skip roads, buildings etc.
+                // Only return cities, towns, villages - skip roads, buildings etc.
                 if (!in_array($result['type'], ['city', 'town', 'village', 'suburb', 'municipality', 'administrative'])) {
                     continue;
                 }

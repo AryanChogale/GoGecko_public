@@ -37,7 +37,7 @@ class PriceChangeRequestController extends Controller
             'final_price' => ['required', 'numeric', 'min:0'],
         ]);
 
-        // Write to branch_product_prices — does NOT touch products.price
+        // Write to branch_product_prices - does NOT touch products.price
         BranchProductPrice::updateOrCreate(
             [
                 'branch_id'  => $priceChangeRequest->branch_id,

@@ -33,7 +33,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 uppercase tracking-wide">Branch</p>
-                                <p class="text-sm text-gray-600">{{ $order->branch->name }}{{ $order->branch->city ? ' — ' . $order->branch->city : '' }}</p>
+                                <p class="text-sm text-gray-600">{{ $order->branch->name }}{{ $order->branch->city ? ' - ' . $order->branch->city : '' }}</p>
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 uppercase tracking-wide">Date</p>
@@ -94,7 +94,7 @@
                                     <p class="text-sm text-gray-500 mt-1 leading-relaxed">
                                         {{ $order->address->address }},
                                         {{ $order->address->city }},
-                                        {{ $order->address->state }} — {{ $order->address->pin }}
+                                        {{ $order->address->state }} - {{ $order->address->pin }}
                                     </p>
                                     <p class="text-xs text-gray-400 mt-2">📞 {{ $order->address->phone }}</p>
                                 @else

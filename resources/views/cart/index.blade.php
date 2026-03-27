@@ -222,7 +222,7 @@
                         <label class="block text-xs font-medium text-gray-700 mb-1">State *</label>
                         <select name="state" id="addr-state-select" required onchange="onAddressStateChange(this.value)"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807]">
-                            <option value="">— Select State —</option>
+                            <option value="">- Select State -</option>
                             @foreach ([
                                 'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh',
                                 'Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka',

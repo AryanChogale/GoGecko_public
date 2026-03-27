@@ -34,6 +34,11 @@
                     <a href="/" class="hover:text-green-700 transition">Home</a>
                     <a href="/products" class="hover:text-green-700 transition">Products</a>
                     <a href="/blogs" class="hover:text-green-700 transition">Blogs</a>
+                    @auth
+                        @if(Auth::user()->isCustomer())
+                            <a href="{{ route('customer.orders') }}" class="hover:text-green-700 transition">Orders</a>
+                        @endif
+                    @endauth
                     <a href="/contact" class="hover:text-green-700 transition">Contact Us</a>
                 @endif
             </div>
@@ -134,6 +139,11 @@
             <a href="/" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Home</a>
             <a href="/products" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Products</a>
             <a href="/blogs" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Blogs</a>
+            @auth
+                @if(Auth::user()->isCustomer())
+                    <a href="{{ route('customer.orders') }}" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Orders</a>
+                @endif
+            @endauth
             <a href="/contact" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Contact Us</a>
         @endif
 

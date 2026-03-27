@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login — GoGecko</title>
+    <title>Login - GoGecko</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap" rel="stylesheet"/>
@@ -14,7 +14,7 @@
 
 <div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
 
-    {{-- Left — branding panel --}}
+    {{-- Left - branding panel --}}
     <div class="hidden md:flex flex-col justify-center gap-16 bg-[#076807] px-14 py-12">
 
         <div>
@@ -43,7 +43,7 @@
 
     </div>
 
-    {{-- Right — form panel --}}
+    {{-- Right - form panel --}}
     <div class="flex flex-col justify-center px-8 sm:px-16 py-12">
 
         <div class="max-w-md w-full mx-auto">
@@ -87,10 +87,6 @@
                 <div>
                     <div class="flex items-center justify-between mb-1">
                         <label class="block text-sm font-medium text-gray-700">Password</label>
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}"
-                               class="text-xs text-[#076807] hover:underline">Forgot password?</a>
-                        @endif
                     </div>
                     <input type="password" name="password" required autocomplete="current-password"
                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#076807] transition">

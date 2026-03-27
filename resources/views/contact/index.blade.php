@@ -12,7 +12,7 @@
         <div class="max-w-6xl mx-auto px-6 py-16">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
-                {{-- Left — info + social --}}
+                {{-- Left - info + social --}}
                 <div>
                     <div class="space-y-3 text-gray-700 text-sm mb-10">
                         <p>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                {{-- Right — form --}}
+                {{-- Right - form --}}
                 <div>
 
                     @if (session('success'))

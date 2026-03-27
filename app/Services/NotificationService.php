@@ -38,7 +38,7 @@ class NotificationService
         $variables = json_encode([
             '1' => (string) $order->id,
             '2' => number_format($order->total_amount, 2),
-            '3' => $order->branch->name . ' — ' . $order->branch->city,
+            '3' => $order->branch->name . ' - ' . $order->branch->city,
             '4' => $address->name,
         ]);
 
@@ -75,7 +75,7 @@ class NotificationService
 
         $message = "Your GoGecko order #{$order->id} has been confirmed!"
             . " Total: Rs." . number_format($order->total_amount, 2)
-            . ". Branch: {$order->branch->name} — {$order->branch->city}."
+            . ". Branch: {$order->branch->name} - {$order->branch->city}."
             . " We will deliver to {$order->address->name} soon.";
 
         try {

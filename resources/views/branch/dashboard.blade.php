@@ -19,7 +19,7 @@
                 <p class="text-sm text-gray-500 mt-1">
                     Welcome back, {{ auth()->user()->name }}
                     @if ($branch)
-                        — {{ $branch->name }}{{ $branch->city ? ', ' . $branch->city : '' }}
+                        - {{ $branch->name }}{{ $branch->city ? ', ' . $branch->city : '' }}
                     @endif
                 </p>
             </div>

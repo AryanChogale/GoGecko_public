@@ -29,7 +29,7 @@
 
                 <div class="grid grid-cols-3 gap-6">
 
-                    {{-- LEFT — main fields --}}
+                    {{-- LEFT - main fields --}}
                     <div class="col-span-2 space-y-5">
 
                         {{-- Basic Info --}}
@@ -113,7 +113,7 @@
 
                     </div>
 
-                    {{-- RIGHT — image + save --}}
+                    {{-- RIGHT - image + save --}}
                     <div class="col-span-1 space-y-5">
 
                         {{-- Image upload card --}}
