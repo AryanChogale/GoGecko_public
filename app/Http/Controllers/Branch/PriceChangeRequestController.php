@@ -13,7 +13,7 @@ class PriceChangeRequestController extends Controller
 {
     public function index(): View
     {
-        $requests = PriceChangeRequest::with('product')
+        $requests = PriceChangeRequest::with('product.subcategory.category')
             ->where('branch_id', auth()->user()->branch_id)
             ->latest()
             ->paginate(10);
@@ -23,7 +23,7 @@ class PriceChangeRequestController extends Controller
 
     public function create(): View
     {
-        $products = Product::orderBy('name')->get();
+        $products = Product::with('subcategory.category')->orderBy('name')->get();
 
         return view('branch.price-requests.create', compact('products'));
     }

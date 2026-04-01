@@ -32,7 +32,7 @@
                             <p class="font-bold text-[#076807] text-sm">{{ $req->branch->name }}</p>
                             <p class="text-xs text-gray-400 mt-3 uppercase tracking-wide mb-1">Product</p>
                             <p class="font-medium text-gray-800 text-sm">{{ $req->product->name }}</p>
-                            <p class="text-xs text-gray-400 mt-1">{{ $req->product->category }}</p>
+                            <p class="text-xs text-gray-400 mt-1">{{ $req->product->subcategory?->category?->name }}</p>
                         </div>
 
                         {{-- Price comparison --}}
@@ -113,3 +113,4 @@
     </div>
 
 </x-app-layout>
+

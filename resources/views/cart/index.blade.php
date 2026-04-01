@@ -194,7 +194,7 @@
                     <label class="flex items-start gap-2 text-sm text-gray-600 cursor-pointer">
                         <input type="checkbox" name="sms_consent" value="1"
                                class="mt-0.5 rounded border-gray-300 accent-[#076807]"
-                               {{ auth()->user()->sms_consent ? 'checked' : '' }}>
+                               {{ auth()->user()->customerProfile->sms_consent ? 'checked' : '' }}>
                         <span>I agree to receive order updates via WhatsApp and SMS on the provided phone numbers</span>
                     </label>
                 </div>

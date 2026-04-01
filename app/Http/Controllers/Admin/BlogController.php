@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
-use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +22,7 @@ class BlogController extends Controller
 
     public function create(): View
     {
-        $categories = Product::distinct()->pluck('category')->sort()->values();
+        $categories = Category::query()->orderBy('name')->pluck('name');
 
         return view('admin.blogs.create', compact('categories'));
     }
@@ -61,7 +61,7 @@ class BlogController extends Controller
 
     public function edit(Blog $blog): View
     {
-        $categories = Product::distinct()->pluck('category')->sort()->values();
+        $categories = Category::query()->orderBy('name')->pluck('name');
 
         return view('admin.blogs.edit', compact('blog', 'categories'));
     }

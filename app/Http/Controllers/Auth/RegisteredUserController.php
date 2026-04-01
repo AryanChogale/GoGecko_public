@@ -46,8 +46,6 @@ class RegisteredUserController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'state'    => $request->state,
-            'city'     => $request->city,
         ]);
 
         // Geocode and assign nearest branch
@@ -77,6 +75,9 @@ class RegisteredUserController extends Controller
             'selected_branch_id' => $branchId,
             'lat'                => $lat,
             'lng'                => $lng,
+            'state'              => $request->state, 
+            'city'               => $request->city,    
+            'sms_consent'        => false,             
             'created_at'         => now(),
             'updated_at'         => now(),
         ]);

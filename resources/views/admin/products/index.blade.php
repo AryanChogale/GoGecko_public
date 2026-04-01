@@ -39,9 +39,9 @@
                                 All Products
                             </a>
                             @foreach ($categories as $cat)
-                                <a href="{{ route('admin.products.index', ['category' => $cat]) }}"
-                                   class="block hover:text-green-600 {{ request('category') == $cat ? 'text-green-600 font-semibold' : '' }}">
-                                    {{ $cat }}
+                                <a href="{{ route('admin.products.index', ['category' => $cat->id]) }}"
+                                   class="block hover:text-green-600 {{ (string) request('category') === (string) $cat->id ? 'text-green-600 font-semibold' : '' }}">
+                                    {{ $cat->name }}
                                 </a>
                             @endforeach
                         </div>
@@ -84,7 +84,7 @@
 
                                 {{-- Category --}}
                                 <p class="text-xs text-gray-400 mt-1">
-                                    {{ $product->category }} · {{ $product->sub_category }}
+                                    {{ $product->subcategory?->category?->name }} · {{ $product->subcategory?->name }}
                                 </p>
 
                                 {{-- Price --}}
@@ -134,3 +134,4 @@
     </div>
 
 </x-app-layout>
+

@@ -39,9 +39,9 @@
                     <div class="md:w-1/2 p-8 flex flex-col">
 
                         <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">
-                            {{ $product->category }}
-                            @if ($product->sub_category)
-                                · {{ $product->sub_category }}
+                            {{ $product->subcategory?->category?->name }}
+                            @if ($product->subcategory?->name)
+                                · {{ $product->subcategory?->name }}
                             @endif
                         </p>
 
@@ -81,3 +81,4 @@
     </div>
 
 </x-app-layout>
+

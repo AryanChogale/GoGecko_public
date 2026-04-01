@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\NotificationService;
 use App\Models\Address;
 use App\Models\Branch;
 use App\Models\CartItem;
@@ -21,7 +20,7 @@ class CheckoutController extends Controller
         ]);
 
         if ($request->has('sms_consent')) {
-            auth()->user()->update(['sms_consent' => true]);
+            auth()->user()->customerProfile()?->update(['sms_consent' => true]);
         }
 
         $address = Address::findOrFail($request->address_id);
@@ -38,8 +37,8 @@ class CheckoutController extends Controller
 
         if (!$branchId) {
             $user  = auth()->user();
-            $state = $user->state ?? $address->state;
-            $city  = $user->city  ?? $address->city;
+            $state = $user->customerProfile->state ?? $address->state;
+            $city  = $user->customerProfile->city  ?? $address->city;
 
             $branches = Branch::where('name', $state)
                 ->whereNotNull('latitude')
@@ -88,7 +87,7 @@ class CheckoutController extends Controller
             fn($item) => $item->product->priceForBranch($branchId) * $item->quantity
         );
 
-        // Create order as payment_pending - cart cleared & Twilio fires only after payment
+        // Create order as payment_pending — cart cleared & Twilio fires only after payment
         $order = Order::create([
             'customer_id'    => auth()->id(),
             'branch_id'      => $branchId,

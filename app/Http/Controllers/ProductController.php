@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,16 +28,16 @@ class ProductController extends Controller
 
     public function index(Request $request): View
     {
-        $categories = Product::distinct()->pluck('category')->sort()->values();
+        $categories = Category::query()->orderBy('name')->get(['id', 'name']);
 
-        $query = Product::query();
+        $query = Product::query()->with(['subcategory:id,name,category_id', 'subcategory.category:id,name']);
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            $query->whereHas('subcategory', fn ($subcategoryQuery) => $subcategoryQuery->where('category_id', $request->category));
         }
 
         $products  = $query->latest()->paginate(12)->withQueryString();
@@ -47,6 +48,7 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
+        $product->load(['subcategory:id,name,category_id', 'subcategory.category:id,name']);
         $branchId = $this->getCustomerBranchId();
 
         return view('products.show', compact('product', 'branchId'));

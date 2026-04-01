@@ -72,7 +72,7 @@
                                     </label>
                                     <select name="category"
                                             class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9]">
-                                        <option value="">- No category -</option>
+                                        <option value="">— No category —</option>
                                         @foreach ($categories as $cat)
                                             <option value="{{ $cat }}"
                                                 {{ old('category', $blog->category) == $cat ? 'selected' : '' }}>

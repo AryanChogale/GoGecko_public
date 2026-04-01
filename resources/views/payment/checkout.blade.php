@@ -29,11 +29,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:items-stretch">
 
                 {{-- Left - Order Summary --}}
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-5 border-b border-gray-100">
                         <h2 class="text-sm font-bold text-gray-400 uppercase tracking-widest">Order Summary</h2>
                     </div>
-                    <div class="divide-y divide-gray-100 flex-1">
+                    <div class="divide-y divide-gray-100">
                         @foreach ($order->items as $item)
                             <div class="flex justify-between items-center px-6 py-3 text-sm">
                                 <span class="text-gray-700">
@@ -44,15 +44,13 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="mt-auto">
-                        <div class="px-6 py-3 flex justify-between text-sm border-t border-gray-100">
-                            <span class="text-gray-500">Branch</span>
-                            <span class="font-medium text-gray-700">{{ $order->branch->name }} — {{ $order->branch->city }}</span>
-                        </div>
-                        <div class="px-6 py-4 flex justify-between border-t-2 border-[#076807]">
-                            <span class="font-bold text-gray-800">Total</span>
-                            <span class="font-bold text-[#076807] text-lg">₹{{ number_format($order->total_amount, 2) }}</span>
-                        </div>
+                    <div class="px-6 py-3 flex justify-between text-sm border-t border-gray-100">
+                        <span class="text-gray-500">Branch</span>
+                        <span class="font-medium text-gray-700">{{ $order->branch->name }} - {{ $order->branch->city }}</span>
+                    </div>
+                    <div class="px-6 py-4 flex justify-between border-t-2 border-[#076807]">
+                        <span class="font-bold text-gray-800">Total</span>
+                        <span class="font-bold text-[#076807] text-lg">₹{{ number_format($order->total_amount, 2) }}</span>
                     </div>
                 </div>
 

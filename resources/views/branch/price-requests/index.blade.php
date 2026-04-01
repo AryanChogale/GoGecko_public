@@ -32,7 +32,7 @@
                             <div class="col-span-1 px-6 py-5">
                                 <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Product</p>
                                 <p class="font-bold text-gray-800 text-sm">{{ $req->product->name }}</p>
-                                <p class="text-xs text-gray-400 mt-1">{{ $req->product->category }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ $req->product->subcategory?->category?->name }}</p>
                             </div>
 
                             {{-- Price change --}}
@@ -106,3 +106,4 @@
     </div>
 
 </x-app-layout>
+

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Subcategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,16 +15,16 @@ class AdminProductController extends Controller
 {
     public function index(): View
     {
-        $categories = Product::distinct()->pluck('category')->sort()->values();
+        $categories = Category::query()->orderBy('name')->get(['id', 'name']);
 
-        $query = Product::query();
+        $query = Product::query()->with(['subcategory:id,name,category_id', 'subcategory.category:id,name']);
 
         if (request()->filled('search')) {
             $query->where('name', 'like', '%' . request('search') . '%');
         }
 
         if (request()->filled('category')) {
-            $query->where('category', request('category'));
+            $query->whereHas('subcategory', fn ($subcategoryQuery) => $subcategoryQuery->where('category_id', request('category')));
         }
 
         $products = $query->latest()->paginate(12)->withQueryString();
@@ -32,7 +34,9 @@ class AdminProductController extends Controller
 
     public function create(): View
     {
-        return view('admin.products.create');
+        $categoryOptions = $this->categoryOptions();
+
+        return view('admin.products.create', compact('categoryOptions'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -41,10 +45,18 @@ class AdminProductController extends Controller
             'name'         => ['required', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'price'        => ['required', 'numeric', 'min:0'],
-            'quantity'     => ['required', 'integer', 'min:0'],
             'category'     => ['required', 'string', 'max:255'],
             'sub_category' => ['required', 'string', 'max:255'],
             'image'        => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $category = Category::firstOrCreate([
+            'name' => trim($validated['category']),
+        ]);
+
+        $subcategory = Subcategory::firstOrCreate([
+            'category_id' => $category->id,
+            'name' => trim($validated['sub_category']),
         ]);
 
         $path = null;
@@ -56,9 +68,7 @@ class AdminProductController extends Controller
             'name'         => $validated['name'],
             'description'  => $validated['description'] ?? null,
             'price'        => $validated['price'],
-            'quantity'     => $validated['quantity'],
-            'category'     => $validated['category'],
-            'sub_category' => $validated['sub_category'],
+            'subcategory_id' => $subcategory->id,
             'image_path'   => $path,
         ]);
 
@@ -68,7 +78,10 @@ class AdminProductController extends Controller
 
     public function edit(Product $product): View
     {
-        return view('admin.products.edit', compact('product'));
+        $product->load(['subcategory:id,name,category_id', 'subcategory.category:id,name']);
+        $categoryOptions = $this->categoryOptions();
+
+        return view('admin.products.edit', compact('product', 'categoryOptions'));
     }
 
     public function update(Request $request, Product $product): RedirectResponse
@@ -77,10 +90,18 @@ class AdminProductController extends Controller
             'name'         => ['required', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'price'        => ['required', 'numeric', 'min:0'],
-            'quantity'     => ['required', 'integer', 'min:0'],
             'category'     => ['required', 'string', 'max:255'],
             'sub_category' => ['required', 'string', 'max:255'],
             'image'        => ['nullable', 'image', 'max:2048'],
+        ]);
+
+        $category = Category::firstOrCreate([
+            'name' => trim($validated['category']),
+        ]);
+
+        $subcategory = Subcategory::firstOrCreate([
+            'category_id' => $category->id,
+            'name' => trim($validated['sub_category']),
         ]);
 
         $path = $product->image_path;
@@ -95,9 +116,7 @@ class AdminProductController extends Controller
             'name'         => $validated['name'],
             'description'  => $validated['description'] ?? null,
             'price'        => $validated['price'],
-            'quantity'     => $validated['quantity'],
-            'category'     => $validated['category'],
-            'sub_category' => $validated['sub_category'],
+            'subcategory_id' => $subcategory->id,
             'image_path'   => $path,
         ]);
 
@@ -115,5 +134,22 @@ class AdminProductController extends Controller
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product deleted successfully.');
+    }
+
+    private function categoryOptions(): array
+    {
+        return Category::query()
+            ->with(['subcategories:id,category_id,name'])
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->map(fn (Category $category) => [
+                'name' => $category->name,
+                'subcategories' => $category->subcategories
+                    ->pluck('name')
+                    ->sort()
+                    ->values()
+                    ->all(),
+            ])
+            ->all();
     }
 }

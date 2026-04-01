@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\CustomerProfile;
 
-//what in the holy breeze is this shit, claude told me not to worry bout it
 /**
  * @property int $id
  * @property string $name
@@ -49,9 +49,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'is_active',
         'branch_id',
-        'sms_consent',
     ];
 
     /**
@@ -74,7 +72,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' => 'boolean',
         ];
     }
 
@@ -105,5 +102,9 @@ class User extends Authenticatable
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);
+    }
+    public function customerProfile()
+    {
+        return $this->hasOne(CustomerProfile::class);
     }
 }

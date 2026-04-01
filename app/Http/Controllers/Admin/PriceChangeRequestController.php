@@ -13,7 +13,7 @@ class PriceChangeRequestController extends Controller
 {
     public function index(): View
     {
-        $requests = PriceChangeRequest::with(['branch', 'product'])
+        $requests = PriceChangeRequest::with(['branch', 'product.subcategory.category'])
             ->where('status', 'pending')
             ->latest()
             ->paginate(10);
@@ -23,7 +23,7 @@ class PriceChangeRequestController extends Controller
 
     public function history(): View
     {
-        $requests = PriceChangeRequest::with(['branch', 'product', 'reviewer'])
+        $requests = PriceChangeRequest::with(['branch', 'product.subcategory.category', 'reviewer'])
             ->whereIn('status', ['approved', 'rejected'])
             ->latest()
             ->paginate(10);
@@ -37,7 +37,7 @@ class PriceChangeRequestController extends Controller
             'final_price' => ['required', 'numeric', 'min:0'],
         ]);
 
-        // Write to branch_product_prices - does NOT touch products.price
+        // Write to branch_product_prices — does NOT touch products.price
         BranchProductPrice::updateOrCreate(
             [
                 'branch_id'  => $priceChangeRequest->branch_id,

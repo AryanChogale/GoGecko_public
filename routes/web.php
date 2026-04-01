@@ -25,7 +25,7 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/dashboard', function () {
+Route::get('/home', function () {
     if (!Auth::check()) {
         return view('dashboard');
     }
@@ -42,6 +42,10 @@ Route::get('/dashboard', function () {
 
     return redirect()->route('customer.dashboard');
 })->name('dashboard');
+
+Route::get('/customer/home', function () {
+    return view('dashboard'); // or customer.home later
+})->name('customer.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -60,6 +64,8 @@ Route::middleware(['auth', 'role:admin'])
         })->name('dashboard');
 
         Route::resource('products', AdminProductController::class)->except(['show']);
+        Route::post('products/categories', [AdminProductController::class, 'storeCategory'])->name('products.categories.store');
+        Route::post('products/subcategories', [AdminProductController::class, 'storeSubcategory'])->name('products.subcategories.store');
         Route::resource('branches', BranchController::class)->except(['show']);
 
         Route::get('price-requests', [AdminPriceChangeRequestController::class, 'index'])->name('price-requests.index');
