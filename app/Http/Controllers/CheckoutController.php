@@ -83,6 +83,16 @@ class CheckoutController extends Controller
             return back()->with('error', 'Your cart is empty.');
         }
 
+        foreach ($cartItems as $item) {
+            if (!$item->product) {
+                return back()->with('error', 'One of the products in your cart is no longer available.');
+            }
+
+            if ($item->product->quantity < $item->quantity) {
+                return back()->with('error', 'Not enough stock available for ' . $item->product->name . '. Please update your cart and try again.');
+            }
+        }
+
         $total = $cartItems->sum(
             fn($item) => $item->product->priceForBranch($branchId) * $item->quantity
         );

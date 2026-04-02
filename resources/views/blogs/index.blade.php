@@ -22,6 +22,22 @@
 
         <div class="max-w-6xl mx-auto px-6">
 
+            @if ($categories->isNotEmpty())
+                <div class="flex flex-wrap items-center justify-center gap-3 mb-8">
+                    <a href="{{ route('blogs.index') }}"
+                       class="px-4 py-2 rounded-full text-sm font-medium transition {{ $selectedCategory ? 'bg-white text-gray-600 border border-gray-200 hover:border-[#076807] hover:text-[#076807]' : 'bg-[#076807] text-white shadow' }}">
+                        All
+                    </a>
+
+                    @foreach ($categories as $category)
+                        <a href="{{ route('blogs.index', ['category' => $category->id]) }}"
+                           class="px-4 py-2 rounded-full text-sm font-medium transition {{ $selectedCategory === $category->id ? 'bg-[#076807] text-white shadow' : 'bg-white text-gray-600 border border-gray-200 hover:border-[#076807] hover:text-[#076807]' }}">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 @forelse ($blogs as $blog)
@@ -45,9 +61,9 @@
                         <div class="p-5 flex flex-col flex-1">
 
                             {{-- Category pill --}}
-                            @if ($blog->category)
+                            @if ($blog->category_name)
                                 <span class="inline-block self-start text-xs font-semibold text-[#076807] bg-[#E9EFE5] px-3 py-1 rounded-full mb-3">
-                                    {{ $blog->category }}
+                                    {{ $blog->category_name }}
                                 </span>
                             @endif
 

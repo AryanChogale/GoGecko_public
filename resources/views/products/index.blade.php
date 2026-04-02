@@ -9,6 +9,12 @@
             Our Products
         </h1>
 
+        @if (session('error'))
+            <div class="max-w-4xl mx-auto mb-6 p-4 bg-red-100 text-red-700 rounded-lg text-sm">
+                {{ session('error') }}
+            </div>
+        @endif
+
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-10">
 
@@ -106,6 +112,10 @@
                             ₹{{ number_format($product->priceForBranch($branchId ?? null), 2) }}
                         </p>
 
+                        <p class="text-xs mt-2 {{ $product->quantity > 0 ? 'text-gray-500' : 'text-red-500 font-semibold' }}">
+                            {{ $product->quantity > 0 ? $product->quantity . ' in stock' : 'Out of stock' }}
+                        </p>
+
 
 
                         <!-- Add to Cart Form -->
@@ -125,6 +135,8 @@
                                     name="quantity"
                                     value="1"
                                     min="1"
+                                    max="{{ max($product->quantity, 1) }}"
+                                    {{ $product->quantity <= 0 ? 'disabled' : '' }}
                                     class="qty-input w-14 text-center border rounded">
 
                                 <span class="text-sm text-gray-500">
@@ -141,8 +153,9 @@
 
                             <button
                                 type="submit"
-                                class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-full text-sm mt-4">
-                                Add To Cart
+                                {{ $product->quantity <= 0 ? 'disabled' : '' }}
+                                class="{{ $product->quantity > 0 ? 'bg-green-600 hover:bg-green-500' : 'bg-gray-300 cursor-not-allowed' }} text-white px-6 py-2 rounded-full text-sm mt-4">
+                                {{ $product->quantity > 0 ? 'Add To Cart' : 'Out of Stock' }}
                             </button>
 
                         </form>

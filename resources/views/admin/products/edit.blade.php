@@ -107,15 +107,25 @@
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                             <h2 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-5">Pricing</h2>
 
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">
-                                    Price (₹) <span class="text-red-500">*</span>
-                                </label>
-                                <div class="relative">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₹</span>
-                                    <input type="number" name="price"
-                                           value="{{ old('price', $product->price) }}" step="0.01" min="0" required
-                                           class="w-full border border-gray-200 rounded-lg pl-7 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9]">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Price (₹) <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₹</span>
+                                        <input type="number" name="price"
+                                               value="{{ old('price', $product->price) }}" step="0.01" min="0" required
+                                               class="w-full border border-gray-200 rounded-lg pl-7 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9]">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                                        Stock Quantity <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="number" name="quantity"
+                                           value="{{ old('quantity', $product->quantity) }}" min="0" required
+                                           class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9]">
                                 </div>
                             </div>
                         </div>

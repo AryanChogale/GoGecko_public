@@ -29,6 +29,32 @@
             line-height: 1.8;
             font-size: 1rem;
         }
+        .content-block ul,
+        .content-block ol {
+            color: #4b5563;
+            line-height: 1.8;
+            font-size: 1rem;
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+        .content-block ul {
+            list-style: disc;
+        }
+        .content-block ol {
+            list-style: decimal;
+        }
+        .content-block blockquote {
+            border-left: 4px solid #076807;
+            background: #f3f7f2;
+            color: #374151;
+            padding: 0.9rem 1rem;
+            margin: 0.75rem 0;
+            font-style: italic;
+        }
+        .content-block a {
+            color: #076807;
+            text-decoration: underline;
+        }
     </style>
 
     <div class="min-h-screen bg-[#E9EFE5] py-12">
@@ -41,7 +67,7 @@
 
             <div class="bg-white rounded-xl shadow border border-gray-100 overflow-hidden mt-4">
 
-                {{-- Hero image - only if exists --}}
+                {{-- Hero image — only if exists --}}
                 @if ($blog->image_path)
                     <img src="{{ Storage::url($blog->image_path) }}"
                          alt="{{ $blog->title }}"
@@ -52,9 +78,9 @@
 
                     {{-- Category pill + meta --}}
                     <div class="flex flex-wrap items-center gap-3 mb-4">
-                        @if ($blog->category)
+                        @if ($blog->category_name)
                             <span class="text-xs font-semibold text-[#076807] bg-[#E9EFE5] px-3 py-1 rounded-full">
-                                {{ $blog->category }}
+                                {{ $blog->category_name }}
                             </span>
                         @endif
                         <span class="text-xs text-gray-400">
@@ -69,19 +95,7 @@
 
                     {{-- Content blocks --}}
                     <div class="content-block space-y-6">
-                        @foreach ($blog->content as $block)
-                            <div>
-                                @if (!empty($block['header']))
-                                    <h2>{{ $block['header'] }}</h2>
-                                @endif
-                                @if (!empty($block['subheader']))
-                                    <h3>{{ $block['subheader'] }}</h3>
-                                @endif
-                                @if (!empty($block['content']))
-                                    <p>{{ $block['content'] }}</p>
-                                @endif
-                            </div>
-                        @endforeach
+                        {!! $blog->rendered_content !!}
                     </div>
 
                     {{-- Bottom back link --}}

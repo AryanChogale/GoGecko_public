@@ -8,6 +8,11 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg text-sm">
+                    {{ session('error') }}
+                </div>
+            @endif
 
             <a href="{{ route('products.index') }}"
                class="text-sm text-gray-500 hover:text-[#076807] transition mb-6 inline-block">
@@ -53,6 +58,10 @@
                             ₹{{ number_format($product->price, 2) }}
                         </p>
 
+                        <p class="text-sm mb-4 {{ $product->quantity > 0 ? 'text-gray-500' : 'text-red-500 font-semibold' }}">
+                            {{ $product->quantity > 0 ? $product->quantity . ' units available' : 'Out of stock' }}
+                        </p>
+
                         @if ($product->description)
                             <p class="text-sm text-gray-600 leading-relaxed mb-6">
                                 {{ $product->description }}
@@ -65,11 +74,14 @@
                             <div class="flex items-center gap-3 mb-4">
                                 <label class="text-sm text-gray-600">Qty:</label>
                                 <input type="number" name="quantity" value="1" min="1"
+                                       max="{{ max($product->quantity, 1) }}"
+                                       {{ $product->quantity <= 0 ? 'disabled' : '' }}
                                        class="w-20 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-[#f9fbf9]">
                             </div>
                             <button type="submit"
-                                    class="w-full bg-[#076807] hover:bg-green-900 text-white font-semibold py-3 rounded-full transition">
-                                Add to Cart
+                                    {{ $product->quantity <= 0 ? 'disabled' : '' }}
+                                    class="w-full {{ $product->quantity > 0 ? 'bg-[#076807] hover:bg-green-900' : 'bg-gray-300 cursor-not-allowed' }} text-white font-semibold py-3 rounded-full transition">
+                                {{ $product->quantity > 0 ? 'Add to Cart' : 'Out of Stock' }}
                             </button>
                         </form>
 

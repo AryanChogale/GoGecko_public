@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\BlogCategory;
+use App\Support\BlogContent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +18,7 @@ class BlogSeeder extends Seeder
                 'excerpt'  => 'From kraft boxes to eco-friendly wrapping, packaging is no longer just a container — it\'s a brand statement. Here\'s what HORECA businesses need to know.',
                 'category' => 'Packaging Products',
                 'image'    => 'blogs/portable-brown-kraft-paper-tea-fruit-gift-packaging-box.jpg',
-                'content'  => json_encode([
+                'content'  => BlogContent::blocksToHtml([
                     ['header' => 'Packaging Has Evolved',        'subheader' => '', 'content' => 'Gone are the days when packaging was just about keeping a product intact. Today, packaging is the first thing a customer sees, touches, and judges your brand by. For hotels, restaurants, and catering businesses, this is more important than ever.'],
                     ['header' => '', 'subheader' => 'Kraft and Corrugated: The Workhorses', 'content' => 'Kraft paper boxes and corrugated shipping boxes remain the backbone of food and retail packaging. They are sturdy, cost-effective, and increasingly preferred by eco-conscious consumers. Choosing the right GSM and flute type can make a significant difference in product protection and presentation.'],
                     ['header' => '', 'subheader' => 'Sustainable Choices Matter', 'content' => 'Institutions and corporates are now actively seeking vendors who offer recyclable and biodegradable packaging options. Switching to eco-friendly materials not only reduces your carbon footprint but also improves your brand image with clients who value sustainability.'],
@@ -29,7 +31,7 @@ class BlogSeeder extends Seeder
                 'excerpt'  => 'Choosing the right corporate gift can strengthen business relationships. We break down the five most impactful gifts that leave a lasting impression.',
                 'category' => 'Corporate Gifting',
                 'image'    => 'blogs/rope-bottle-diary-pen-cardholder-desk-clock-black.webp',
-                'content'  => json_encode([
+                'content'  => BlogContent::blocksToHtml([
                     ['header' => 'Why Corporate Gifting Matters', 'subheader' => '', 'content' => 'Corporate gifting is one of the most effective ways to build loyalty, show appreciation, and keep your brand top of mind. But not all gifts are created equal. The best ones are useful, well-designed, and memorable.'],
                     ['header' => '', 'subheader' => '1. Premium Pen Sets', 'content' => 'A well-crafted pen set in a gift box signals professionalism and attention to detail. It is a classic gift that never goes out of style, and one that gets used daily — keeping your brand visible.'],
                     ['header' => '', 'subheader' => '2. Leather Notebooks', 'content' => 'Executives love a quality notebook. A faux-leather A5 notebook with ruled pages is perfect for meetings, travel, and daily planning. It feels premium without being over the top.'],
@@ -45,7 +47,7 @@ class BlogSeeder extends Seeder
                 'excerpt'  => 'A well-stocked housekeeping department is the backbone of any hotel\'s guest experience. Here are the must-have products every property should always have on hand.',
                 'category' => 'Housekeeping',
                 'image'    => 'blogs/housekeeping-cleaning-person-with-mop-clean-floor-office-domestic-worker-cleaner_93150-39589.avif',
-                'content'  => json_encode([
+                'content'  => BlogContent::blocksToHtml([
                     ['header' => 'The Hidden Engine of Guest Satisfaction', 'subheader' => '', 'content' => 'Guests rarely think about housekeeping when everything is running smoothly — and that is exactly the point. A well-equipped housekeeping team ensures rooms are spotless, amenities are replenished, and every touchpoint feels fresh. Running out of basic supplies is simply not an option.'],
                     ['header' => '', 'subheader' => 'Cleaning Cloths and Mops', 'content' => 'Microfibre cleaning cloths are a staple. They clean without scratching, reduce chemical usage, and are reusable. Paired with a good spin mop and bucket set, your team can cover large floor areas efficiently and hygienically.'],
                     ['header' => '', 'subheader' => 'Cleaning Chemicals', 'content' => 'An all-purpose liquid cleaner in a 5-litre concentrated format is the most cost-effective way to maintain floors, tiles, and surfaces. Always ensure your team is trained on dilution ratios to maximise value and safety.'],
@@ -60,7 +62,7 @@ class BlogSeeder extends Seeder
                 'excerpt'  => 'From shampoo sachets to dental kits, the right guest room amenities define your hotel\'s quality. Here\'s what every property should offer.',
                 'category' => 'Hotel Dry Amenities',
                 'image'    => 'blogs/hotel-spa-amenities-wooden-tray-hotel-spa-amenities-wooden-tray-copy-space-185295836.webp',
-                'content'  => json_encode([
+                'content'  => BlogContent::blocksToHtml([
                     ['header' => 'First Impressions Begin in the Bathroom', 'subheader' => '', 'content' => 'The guest room bathroom is one of the first things a guest inspects. A neatly arranged tray of amenities signals quality, care, and attention to detail. It sets the tone for the entire stay before the guest has even unpacked.'],
                     ['header' => '', 'subheader' => 'Hair Care Essentials', 'content' => 'Shampoo and conditioner sachets are non-negotiable. Single-use sachets are hygienic, easy to stock, and preferred by guests over shared dispensers. Choose mild, pleasant fragrances that suit a wide range of guests.'],
                     ['header' => '', 'subheader' => 'Body Care and Soap', 'content' => 'Individually wrapped soap bars and moisturiser sachets elevate the perceived quality of your property. Guests associate wrapped amenities with hygiene and exclusivity — a small investment with a significant impact on reviews.'],
@@ -74,7 +76,7 @@ class BlogSeeder extends Seeder
                 'excerpt'  => 'Many HORECA businesses underestimate the cost of cheap disposables. Here\'s how investing in quality disposables actually reduces long-term operational costs.',
                 'category' => 'Disposables',
                 'image'    => 'blogs/vibrant-assortment-colorful-paper-plates-cups-arranged-neatly-white-background-eco-friendly-disposable-tableware-festive-398825323.webp',
-                'content'  => json_encode([
+                'content'  => BlogContent::blocksToHtml([
                     ['header' => 'The Hidden Cost of Cheap Disposables', 'subheader' => '', 'content' => 'When businesses buy the cheapest disposable plates, cups, and cutlery available, they often end up spending more — on replacements, complaints, and the operational hassle of products that fail mid-service. Quality disposables pay for themselves.'],
                     ['header' => '', 'subheader' => 'Plates and Cups That Hold Up', 'content' => 'Sturdy disposable plates and 200ml cups that do not buckle under food weight or hot beverages reduce wastage and guest complaints at events and canteens. The per-unit cost difference is minimal compared to the savings in waste.'],
                     ['header' => '', 'subheader' => 'Foil Containers for Food Safety', 'content' => 'Aluminium foil containers are oven-safe, leak-proof, and ideal for takeaway and meal prep operations. Investing in proper foil containers reduces spillage incidents and maintains food temperature — both critical for catering businesses.'],
@@ -88,7 +90,7 @@ class BlogSeeder extends Seeder
                 'excerpt'  => 'A well-stocked office runs smoother. Here is the definitive checklist of stationery every workplace should have on hand at all times.',
                 'category' => 'Office Stationery',
                 'image'    => 'blogs/desk_organized.jpg',
-                'content'  => json_encode([
+                'content'  => BlogContent::blocksToHtml([
                     ['header' => 'Why Stationery Stocks Matter', 'subheader' => '', 'content' => 'Running out of printer paper during a deadline, or not having a stapler when you need one, disrupts workflow and frustrates staff. Maintaining a well-stocked stationery supply is one of the simplest ways to keep an office running efficiently.'],
                     ['header' => '', 'subheader' => 'Paper and Filing', 'content' => 'A4 copier paper is the single most consumed office supply. Keep at least one ream per printer per week. Pair it with file folders for document organisation — structured filing saves hours of searching time across the team.'],
                     ['header' => '', 'subheader' => 'Writing and Correction Tools', 'content' => 'Ball pens, whiteboard markers, and correction pens are daily essentials. Whiteboard markers in four colours make meeting rooms more effective. Sticky notes remain one of the most versatile communication tools in any office.'],
@@ -99,11 +101,16 @@ class BlogSeeder extends Seeder
         ];
 
         foreach ($blogs as $blog) {
+            $blogCategory = BlogCategory::firstOrCreate([
+                'name' => $blog['category'],
+            ]);
+
             DB::table('blogs')->insert([
                 'title'      => $blog['title'],
                 'slug'       => $blog['slug'],
                 'excerpt'    => $blog['excerpt'],
                 'category'   => $blog['category'],
+                'blog_category_id' => $blogCategory->id,
                 'content'    => $blog['content'],
                 'image_path' => $blog['image'],
                 'author_id'  => null,

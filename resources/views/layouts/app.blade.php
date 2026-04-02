@@ -202,8 +202,15 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", () => {
 
             const input = btn.parentElement.querySelector(".qty-input")
+            const nextValue = parseInt(input.value) + 1
+            const max = parseInt(input.max || "0")
 
-            input.value = parseInt(input.value) + 1
+            if (max > 0) {
+                input.value = Math.min(nextValue, max)
+                return
+            }
+
+            input.value = nextValue
 
         })
 
@@ -250,15 +257,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 body:formData
 
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(async res => ({ ok: res.ok, data: await res.json() }))
+            .then(({ ok, data }) => {
+
+                if(!ok){
+                    showToast(data.error || "Could not add this item to cart.")
+                    return
+                }
 
                 if(data.success){
 
                     showToast("Cart Updated Successfully.")
 
                     const input = form.querySelector(".qty-input")
-                    input.value = 1
+                    input.value = input.disabled ? input.value : 1
 
                     const cartCount = document.getElementById("cart-count")
 
@@ -268,6 +280,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
 
+            })
+            .catch(() => {
+                showToast("Could not add this item to cart.")
             })
 
         })

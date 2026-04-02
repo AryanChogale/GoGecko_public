@@ -45,7 +45,14 @@
                                             @endphp
                                             <img src="{{ $imgSrc }}" class="w-12 h-12 object-cover rounded">
                                         @endif
-                                        <span class="font-medium text-gray-900">{{ $item->product->name }}</span>
+                                        <div>
+                                            <span class="font-medium text-gray-900">{{ $item->product->name }}</span>
+                                            @if ($item->quantity > $item->product->quantity)
+                                                <p class="text-xs text-red-500 mt-1">Only {{ $item->product->quantity }} left in stock. Reduce quantity before checkout.</p>
+                                            @elseif ($item->product->quantity === 0)
+                                                <p class="text-xs text-red-500 mt-1">Currently out of stock.</p>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 text-gray-900">₹{{ number_format($unitPrice, 2) }}</td>
                                     <td class="px-6 py-4 text-gray-900">
@@ -90,6 +97,11 @@
                                 {{-- Info --}}
                                 <div class="flex-1 min-w-0">
                                     <p class="font-medium text-gray-900 text-sm truncate">{{ $item->product->name }}</p>
+                                    @if ($item->quantity > $item->product->quantity)
+                                        <p class="text-xs text-red-500 mt-1">Only {{ $item->product->quantity }} left in stock.</p>
+                                    @elseif ($item->product->quantity === 0)
+                                        <p class="text-xs text-red-500 mt-1">Currently out of stock.</p>
+                                    @endif
                                     <p class="text-[#076807] font-semibold text-sm mt-0.5">₹{{ number_format($unitPrice, 2) }}</p>
 
                                     {{-- Qty controls --}}
@@ -411,8 +423,14 @@ function updateQuantity(productId, change) {
         },
         body: JSON.stringify({ product_id: productId, change: change })
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => ({ ok: res.ok, data: await res.json() }))
+    .then(({ ok, data }) => {
+        if (!ok) {
+            if (data.error) {
+                alert(data.error);
+            }
+            return;
+        }
         if (data.removed) {
             document.getElementById("row-" + productId)?.remove();
             data.cartTotal
@@ -429,6 +447,9 @@ function updateQuantity(productId, change) {
         data.cartTotal
             ? document.getElementById("cart-total").innerText = "₹" + data.cartTotal
             : recalcCartTotal();
+    })
+    .catch(() => {
+        alert('Could not update cart quantity right now. Please try again.');
     });
 }
 </script>

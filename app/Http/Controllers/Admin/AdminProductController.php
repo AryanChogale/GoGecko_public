@@ -45,6 +45,7 @@ class AdminProductController extends Controller
             'name'         => ['required', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'price'        => ['required', 'numeric', 'min:0'],
+            'quantity'     => ['required', 'integer', 'min:0'],
             'category'     => ['required', 'string', 'max:255'],
             'sub_category' => ['required', 'string', 'max:255'],
             'image'        => ['nullable', 'image', 'max:2048'],
@@ -68,6 +69,7 @@ class AdminProductController extends Controller
             'name'         => $validated['name'],
             'description'  => $validated['description'] ?? null,
             'price'        => $validated['price'],
+            'quantity'     => $validated['quantity'],
             'subcategory_id' => $subcategory->id,
             'image_path'   => $path,
         ]);
@@ -90,6 +92,7 @@ class AdminProductController extends Controller
             'name'         => ['required', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'price'        => ['required', 'numeric', 'min:0'],
+            'quantity'     => ['required', 'integer', 'min:0'],
             'category'     => ['required', 'string', 'max:255'],
             'sub_category' => ['required', 'string', 'max:255'],
             'image'        => ['nullable', 'image', 'max:2048'],
@@ -116,6 +119,7 @@ class AdminProductController extends Controller
             'name'         => $validated['name'],
             'description'  => $validated['description'] ?? null,
             'price'        => $validated['price'],
+            'quantity'     => $validated['quantity'],
             'subcategory_id' => $subcategory->id,
             'image_path'   => $path,
         ]);

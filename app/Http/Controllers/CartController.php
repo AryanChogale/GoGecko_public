@@ -37,12 +37,31 @@ class CartController extends Controller
 
         $productId = $request->product_id;
         $quantity  = $request->quantity ?? 1;
+        $product   = Product::findOrFail($productId);
+
+        if ($product->quantity <= 0) {
+            $message = 'This product is currently out of stock.';
+
+            return $request->ajax()
+                ? response()->json(['success' => false, 'error' => $message], 422)
+                : back()->with('error', $message);
+        }
 
         if (Auth::check() && Auth::user()->isCustomer()) {
 
             $item = CartItem::where('customer_id', Auth::id())
                 ->where('product_id', $productId)
                 ->first();
+
+            $newQuantity = ($item?->quantity ?? 0) + $quantity;
+
+            if ($newQuantity > $product->quantity) {
+                $message = 'Only ' . $product->quantity . ' units of ' . $product->name . ' are available right now.';
+
+                return $request->ajax()
+                    ? response()->json(['success' => false, 'error' => $message], 422)
+                    : back()->with('error', $message);
+            }
 
             if ($item) {
                 $item->increment('quantity', $quantity);
@@ -57,6 +76,15 @@ class CartController extends Controller
         } else {
 
             $cart = session()->get('guest_cart', []);
+            $newQuantity = ($cart[$productId] ?? 0) + $quantity;
+
+            if ($newQuantity > $product->quantity) {
+                $message = 'Only ' . $product->quantity . ' units of ' . $product->name . ' are available right now.';
+
+                return $request->ajax()
+                    ? response()->json(['success' => false, 'error' => $message], 422)
+                    : back()->with('error', $message);
+            }
 
             if (isset($cart[$productId])) {
                 $cart[$productId] += $quantity;
@@ -83,18 +111,29 @@ class CartController extends Controller
         }
 
         foreach ($cart as $productId => $quantity) {
+            $product = Product::find($productId);
+
+            if (!$product || $product->quantity <= 0) {
+                continue;
+            }
 
             $item = CartItem::where('customer_id', Auth::id())
                 ->where('product_id', $productId)
                 ->first();
 
+            $newQuantity = min(($item?->quantity ?? 0) + $quantity, $product->quantity);
+
+            if ($newQuantity <= 0) {
+                continue;
+            }
+
             if ($item) {
-                $item->increment('quantity', $quantity);
+                $item->update(['quantity' => $newQuantity]);
             } else {
                 CartItem::create([
                     'customer_id' => Auth::id(),
                     'product_id'  => $productId,
-                    'quantity'    => $quantity,
+                    'quantity'    => $newQuantity,
                 ]);
             }
         }
@@ -147,9 +186,25 @@ class CartController extends Controller
 
             $item = CartItem::where('customer_id', Auth::id())
                 ->where('product_id', $productId)
+                ->with('product')
                 ->first();
 
             if (!$item) return response()->json([]);
+
+            $newQuantity = $item->quantity + $change;
+
+            if ($change > 0 && $newQuantity > $item->product->quantity) {
+                return response()->json([
+                    'error' => 'Only ' . $item->product->quantity . ' units of ' . $item->product->name . ' are available right now.',
+                    'quantity' => $item->quantity,
+                    'total' => number_format($item->product->priceForBranch($branchId) * $item->quantity, 2),
+                    'cartTotal' => number_format(
+                        CartItem::where('customer_id', Auth::id())->with('product')->get()
+                            ->sum(fn($i) => $i->product->priceForBranch($branchId) * $i->quantity),
+                        2
+                    ),
+                ], 422);
+            }
 
             $item->quantity += $change;
 
@@ -177,10 +232,31 @@ class CartController extends Controller
             ]);
         }
 
-        // Guest cart - no branch, use global price
+        // Guest cart — no branch, use global price
         $cart = session()->get('guest_cart', []);
 
         if (!isset($cart[$productId])) return response()->json([]);
+
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json([]);
+        }
+
+        $newQuantity = $cart[$productId] + $change;
+
+        if ($change > 0 && $newQuantity > $product->quantity) {
+            $cartTotal = collect($cart)->map(function ($qty, $pid) {
+                $p = Product::find($pid);
+                return $p ? $p->priceForBranch(null) * $qty : 0;
+            })->sum();
+
+            return response()->json([
+                'error' => 'Only ' . $product->quantity . ' units of ' . $product->name . ' are available right now.',
+                'quantity' => $cart[$productId],
+                'total' => number_format($product->priceForBranch(null) * $cart[$productId], 2),
+                'cartTotal' => number_format($cartTotal, 2),
+            ], 422);
+        }
 
         $cart[$productId] += $change;
 
@@ -192,7 +268,6 @@ class CartController extends Controller
 
         session()->put('guest_cart', $cart);
 
-        $product   = Product::find($productId);
         $unitPrice = $product->priceForBranch(null);
 
         $cartTotal = collect($cart)->map(function ($qty, $pid) {

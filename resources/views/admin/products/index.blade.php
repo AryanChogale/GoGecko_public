@@ -92,6 +92,10 @@
                                     ₹{{ number_format($product->price, 2) }}
                                 </p>
 
+                                <p class="text-xs mt-1 {{ $product->quantity > 0 ? 'text-gray-500' : 'text-red-500 font-semibold' }}">
+                                    Stock: {{ $product->quantity }}
+                                </p>
+
                                 {{-- Actions --}}
                                 <div class="mt-4 flex flex-col gap-2">
                                     <a href="{{ route('admin.products.edit', $product) }}"

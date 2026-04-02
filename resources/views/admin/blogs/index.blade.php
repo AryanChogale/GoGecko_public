@@ -21,6 +21,22 @@
                 </div>
             @endif
 
+            @if ($categories->isNotEmpty())
+                <div class="flex flex-wrap items-center gap-3 mb-6">
+                    <a href="{{ route('admin.blogs.index') }}"
+                       class="px-4 py-2 rounded-full text-sm font-medium transition {{ $selectedCategory ? 'bg-white text-gray-600 border border-gray-200 hover:border-[#076807] hover:text-[#076807]' : 'bg-[#076807] text-white shadow' }}">
+                        All
+                    </a>
+
+                    @foreach ($categories as $category)
+                        <a href="{{ route('admin.blogs.index', ['category' => $category->id]) }}"
+                           class="px-4 py-2 rounded-full text-sm font-medium transition {{ $selectedCategory === $category->id ? 'bg-[#076807] text-white shadow' : 'bg-white text-gray-600 border border-gray-200 hover:border-[#076807] hover:text-[#076807]' }}">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+
             <div class="space-y-4">
 
                 @forelse ($blogs as $blog)
@@ -42,9 +58,9 @@
                             <div class="flex-1 px-6 py-5 flex flex-col justify-between">
                                 <div>
                                     <div class="flex items-center gap-3 mb-2">
-                                        @if ($blog->category)
+                                        @if ($blog->category_name)
                                             <span class="text-xs font-semibold text-[#076807] bg-[#E9EFE5] px-3 py-1 rounded-full">
-                                                {{ $blog->category }}
+                                                {{ $blog->category_name }}
                                             </span>
                                         @endif
                                         <span class="text-xs text-gray-400">{{ $blog->reading_time }} min read</span>
