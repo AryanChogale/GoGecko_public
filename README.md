@@ -76,12 +76,17 @@ php artisan key:generate
 # 6. Run migrations
 php artisan migrate
 
+
 # 7. Link storage
 php artisan storage:link
 
 # 8. Seed the database (optional)
 php artisan db:seed --class=ProductSeeder
-php artisan db:seed --class=BlogSeeder
+php artisan db:seed --class=Blogseeder
+php artisan db:seed --class=UserSeeder
+
+# OR Use this if seeding from scratch
+php artisan db:seed
 
 # 9. Start the server
 php artisan serve
