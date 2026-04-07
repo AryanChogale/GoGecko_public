@@ -1,82 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Verify Email - GoGecko</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="font-sans antialiased bg-[#E9EFE5] min-h-screen">
-
-<div class="min-h-screen grid grid-cols-1 md:grid-cols-2">
-
-    {{-- Left --}}
-    <div class="hidden md:flex flex-col justify-center gap-16 bg-[#076807] px-14 py-12">
-        <div>
-            <h1 class="text-5xl font-bold text-white leading-tight mb-4">Verify<br>Your Email.</h1>
-            <p class="text-green-300 text-base leading-relaxed max-w-xs">
-                One last step - verify your email to start using your GoGecko account.
-            </p>
-        </div>
-        <div class="space-y-4">
-            <div class="flex items-center gap-3 text-green-200 text-sm">
-                <span class="w-8 h-8 rounded-full bg-white bg-opacity-10 flex items-center justify-center">📧</span>
-                Check your inbox
-            </div>
-            <div class="flex items-center gap-3 text-green-200 text-sm">
-                <span class="w-8 h-8 rounded-full bg-white bg-opacity-10 flex items-center justify-center">🔗</span>
-                Click the verification link
-            </div>
-            <div class="flex items-center gap-3 text-green-200 text-sm">
-                <span class="w-8 h-8 rounded-full bg-white bg-opacity-10 flex items-center justify-center">✅</span>
-                Start ordering on GoGecko
-            </div>
-        </div>
+<x-guest-layout>
+    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
     </div>
 
-    {{-- Right --}}
-    <div class="flex flex-col justify-center px-8 sm:px-16 py-12">
-        <div class="max-w-md w-full mx-auto">
-
-            <div class="flex justify-end mb-8">
-                <a href="/"><img src="{{ asset('storage/logo/logo.png') }}" alt="GoGecko" class="h-10"></a>
-            </div>
-
-            <h2 class="text-3xl font-bold text-gray-900 mb-1">Check Your Email</h2>
-            <p class="text-sm text-gray-500 mb-8">
-                Thanks for signing up! Please verify your email address by clicking the link we sent you.
-            </p>
-
-            @if (session('status') == 'verification-link-sent')
-                <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm">
-                    A new verification link has been sent to your email address.
-                </div>
-            @endif
-
-            <div class="space-y-4">
-                <form method="POST" action="{{ route('verification.send') }}">
-                    @csrf
-                    <button type="submit"
-                            class="w-full bg-[#076807] hover:bg-green-900 text-white font-semibold py-3 rounded-xl transition shadow-md text-sm">
-                        Resend Verification Email
-                    </button>
-                </form>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                            class="w-full border border-gray-300 text-gray-600 hover:border-red-400 hover:text-red-500 font-medium py-3 rounded-xl transition text-sm">
-                        Log Out
-                    </button>
-                </form>
-            </div>
-
+    @if (session('status') == 'verification-link-sent')
+        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
         </div>
-    </div>
+    @endif
 
-</div>
-</body>
-</html>
+    <div class="mt-4 flex items-center justify-between">
+        <form method="POST" action="{{ route('verification.send') }}">
+            @csrf
+
+            <div>
+                <x-primary-button>
+                    {{ __('Resend Verification Email') }}
+                </x-primary-button>
+            </div>
+        </form>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+
+            <button type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                {{ __('Log Out') }}
+            </button>
+        </form>
+    </div>
+</x-guest-layout>

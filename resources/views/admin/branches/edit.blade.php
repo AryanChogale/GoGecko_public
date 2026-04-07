@@ -10,7 +10,7 @@
                         ← Back to Branches
                     </a>
                     <h1 class="text-2xl font-bold text-[#076807]">Edit Branch</h1>
-                    <p class="text-sm text-gray-500 mt-1">{{ $branch->name }}{{ $branch->city ? ' - ' . $branch->city : '' }}</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ $branch->name }}{{ $branch->city ? ' — ' . $branch->city : '' }}</p>
                 </div>
                 <form method="POST" action="{{ route('admin.branches.destroy', $branch) }}">
                     @csrf
@@ -83,13 +83,13 @@
                                     @if ($branch->latitude && $branch->longitude)
                                         <span class="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 px-3 py-1.5 rounded-full">
                                             <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                                            Geocoded - {{ $branch->latitude }}, {{ $branch->longitude }}
+                                            Geocoded — {{ $branch->latitude }}, {{ $branch->longitude }}
                                         </span>
                                         <span class="text-xs text-gray-400">Will re-geocode if city or name changes</span>
                                     @else
                                         <span class="inline-flex items-center gap-1 text-xs bg-yellow-50 text-yellow-700 px-3 py-1.5 rounded-full">
                                             <span class="w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>
-                                            No coordinates - will geocode on save
+                                            No coordinates — will geocode on save
                                         </span>
                                     @endif
                                 </div>

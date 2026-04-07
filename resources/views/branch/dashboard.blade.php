@@ -128,7 +128,7 @@
                             </div>
                         </a>
 
-                        <a href="/products"
+                        <a href="{{ route('branch.products.index') }}"
                            class="flex items-center gap-3 p-4 bg-[#E9EFE5] hover:bg-green-100 rounded-xl transition">
                             <span class="text-2xl">📦</span>
                             <div>

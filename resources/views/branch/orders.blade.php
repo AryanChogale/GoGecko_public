@@ -94,7 +94,7 @@
                                     <p class="text-sm text-gray-500 mt-1 leading-relaxed">
                                         {{ $order->address->address }},
                                         {{ $order->address->city }},
-                                        {{ $order->address->state }} - {{ $order->address->pin }}
+                                        {{ $order->address->state }} — {{ $order->address->pin }}
                                     </p>
                                     @if ($order->address->landmark)
                                         <p class="text-xs text-gray-400 mt-1">Landmark: {{ $order->address->landmark }}</p>

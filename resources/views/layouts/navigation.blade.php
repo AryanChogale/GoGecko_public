@@ -28,6 +28,7 @@
                     <a href="{{ route('admin.contact') }}" class="hover:text-green-700 transition">Contact</a>
                 @elseif (Auth::check() && Auth::user()->isBranch())
                     <a href="{{ route('branch.dashboard') }}" class="hover:text-green-700 transition">Dashboard</a>
+                    <a href="{{ route('branch.products.index') }}" class="hover:text-green-700 transition">Products</a>
                     <a href="{{ route('branch.orders') }}" class="hover:text-green-700 transition">Orders</a>
                     <a href="{{ route('branch.price-requests.index') }}" class="hover:text-green-700 transition">Price Requests</a>
                 @else
@@ -60,7 +61,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
-                        <span id="cart-count" class="ml-1 text-sm text-gray-700">{{ $cartCount }}</span>
+                        <span class="ml-1 text-sm text-gray-700" data-cart-count>{{ $cartCount }}</span>
                     </a>
                 @endif
 
@@ -71,6 +72,10 @@
                     </a>
                 @elseif (Auth::check() && Auth::user()->isAdmin())
                     <a href="/admin/products#searchbar" class="text-gray-700 hover:text-green-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg>
+                    </a>
+                @elseif (Auth::check() && Auth::user()->isBranch())
+                    <a href="{{ route('branch.products.index') }}#searchbar" class="text-gray-700 hover:text-green-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg>
                     </a>
                 @endif
@@ -133,6 +138,7 @@
             <a href="{{ route('admin.contact') }}" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Contact</a>
         @elseif (Auth::check() && Auth::user()->isBranch())
             <a href="{{ route('branch.dashboard') }}" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Dashboard</a>
+            <a href="{{ route('branch.products.index') }}" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Products</a>
             <a href="{{ route('branch.orders') }}" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Orders</a>
             <a href="{{ route('branch.price-requests.index') }}" class="block text-gray-700 hover:text-green-700 text-sm font-medium">Price Requests</a>
         @else

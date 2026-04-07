@@ -21,11 +21,16 @@ class PriceChangeRequestController extends Controller
         return view('branch.price-requests.index', compact('requests'));
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
         $products = Product::with('subcategory.category')->orderBy('name')->get();
+        $selectedProductId = $request->integer('product');
 
-        return view('branch.price-requests.create', compact('products'));
+        if ($selectedProductId && !$products->contains('id', $selectedProductId)) {
+            abort(404);
+        }
+
+        return view('branch.price-requests.create', compact('products', 'selectedProductId'));
     }
 
     public function store(Request $request): RedirectResponse

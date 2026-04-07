@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\CustomerProfile;
 
+//what in the holy breeze is this shit, claude told me not to worry bout it
 /**
  * @property int $id
  * @property string $name

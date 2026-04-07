@@ -7,6 +7,17 @@
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-[#076807]">Orders</h1>
                 <p class="text-sm text-gray-500 mt-1">All customer orders across all branches</p>
+                <div class="flex items-center gap-3 mt-4 text-sm">
+                    <a href="{{ route('admin.orders') }}"
+                       class="{{ $show !== 'unassigned' ? 'text-[#076807] font-semibold' : 'text-gray-500 hover:text-[#076807]' }}">
+                        All Orders
+                    </a>
+                    <span class="text-gray-300">|</span>
+                    <a href="{{ route('admin.orders', ['show' => 'unassigned']) }}"
+                       class="{{ $show === 'unassigned' ? 'text-[#076807] font-semibold' : 'text-gray-500 hover:text-[#076807]' }}">
+                        Unassigned Orders
+                    </a>
+                </div>
             </div>
 
             @if (session('success'))
@@ -33,7 +44,9 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 uppercase tracking-wide">Branch</p>
-                                <p class="text-sm text-gray-600">{{ $order->branch->name }}{{ $order->branch->city ? ' - ' . $order->branch->city : '' }}</p>
+                                <p class="text-sm text-gray-600">
+                                    {{ $order->branch?->name ? $order->branch->name . ($order->branch->city ? ' — ' . $order->branch->city : '') : 'Unassigned' }}
+                                </p>
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 uppercase tracking-wide">Date</p>
@@ -94,7 +107,7 @@
                                     <p class="text-sm text-gray-500 mt-1 leading-relaxed">
                                         {{ $order->address->address }},
                                         {{ $order->address->city }},
-                                        {{ $order->address->state }} - {{ $order->address->pin }}
+                                        {{ $order->address->state }} — {{ $order->address->pin }}
                                     </p>
                                     <p class="text-xs text-gray-400 mt-2">📞 {{ $order->address->phone }}</p>
                                 @else
@@ -105,6 +118,28 @@
                             {{-- Actions --}}
                             <div class="px-6 py-5">
                                 <h4 class="text-xs font-bold text-[#076807] uppercase tracking-wide mb-3">Actions</h4>
+
+                                @if (is_null($order->branch_id))
+                                    <form method="POST"
+                                          action="{{ route('admin.orders.assignBranch', $order) }}"
+                                          class="flex flex-wrap items-center gap-2 mb-4">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="branch_id"
+                                                class="w-full max-w-[220px] border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#076807] bg-white">
+                                            <option value="">Select branch</option>
+                                            @foreach ($branches as $branch)
+                                                <option value="{{ $branch->id }}">
+                                                    {{ $branch->name }}{{ $branch->city ? ' - ' . $branch->city : '' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="submit"
+                                                class="shrink-0 bg-[#076807] hover:bg-green-900 text-white text-xs font-medium px-3 py-2 rounded-lg transition">
+                                            Assign
+                                        </button>
+                                    </form>
+                                @endif
 
                                 {{-- Status update --}}
                                 @if ($order->status !== 'delivered' && $order->cancellation_status !== 'approved')

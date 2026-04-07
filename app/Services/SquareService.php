@@ -33,7 +33,7 @@ class SquareService
      * Charge a card using the tokenized sourceId from Square Web Payments SDK.
      *
      * @param  string $sourceId  Token from Square.js card.tokenize()
-     * @param  float  $amount    Order total (e.g. 250.00) - converted to smallest unit internally
+     * @param  float  $amount    Order total (e.g. 250.00) — converted to smallest unit internally
      * @param  int    $orderId   Your internal order ID (used as reference)
      * @return array  ['success' => bool, 'payment_id' => string|null, 'error' => string|null]
      */

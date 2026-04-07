@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Order;
 use App\Models\User;
 use App\Services\GeoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BranchController extends Controller
@@ -146,8 +148,40 @@ class BranchController extends Controller
 
     public function destroy(Branch $branch): RedirectResponse
     {
-        $branch->user?->delete();
-        $branch->delete();
+        DB::transaction(function () use ($branch): void {
+            $activeOrders = Order::with(['customer.customerProfile', 'address'])
+                ->where('branch_id', $branch->id)
+                ->whereIn('status', ['pending', 'shipped', 'out_for_delivery'])
+                ->get();
+
+            $candidateBranches = Branch::query()
+                ->where('name', $branch->name)
+                ->where('id', '!=', $branch->id)
+                ->whereNotNull('latitude')
+                ->whereNotNull('longitude')
+                ->get();
+
+            foreach ($activeOrders as $order) {
+                $replacementBranchId = null;
+
+                if ($candidateBranches->isNotEmpty()) {
+                    $lat = $order->address?->lat ?? $order->customer?->customerProfile?->lat;
+                    $lng = $order->address?->lng ?? $order->customer?->customerProfile?->lng;
+
+                    if ($lat !== null && $lng !== null) {
+                        $replacement = app(GeoService::class)->closestBranch($candidateBranches, (float) $lat, (float) $lng);
+                        $replacementBranchId = $replacement?->id;
+                    }
+                }
+
+                $order->update([
+                    'branch_id' => $replacementBranchId,
+                ]);
+            }
+
+            $branch->user?->delete();
+            $branch->delete();
+        });
 
         return redirect()->route('admin.branches.index')
             ->with('success', 'Branch deleted successfully.');

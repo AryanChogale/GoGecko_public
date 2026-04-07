@@ -1,5 +1,15 @@
 <x-app-layout>
 
+@php
+    $showFloatingCart = !Auth::check() || Auth::user()->isCustomer();
+
+    if (Auth::check() && Auth::user()->isCustomer()) {
+        $floatingCartCount = \App\Models\CartItem::where('customer_id', Auth::id())->sum('quantity');
+    } else {
+        $floatingCartCount = array_sum(session()->get('guest_cart', []));
+    }
+@endphp
+
 <div class="py-10 bg-[#E9EFE5] min-h-screen">
 
     <div class="max-w-7xl mx-auto px-6">
@@ -185,5 +195,20 @@
     </div>
 
 </div>
+
+@if ($showFloatingCart)
+    <a href="{{ route('cart.index') }}"
+       class="fixed bottom-24 right-6 z-40 inline-flex items-center gap-3 rounded-full bg-[#076807] px-5 py-3 text-white shadow-xl transition hover:bg-green-900">
+        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white/15">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+        </span>
+        <span class="leading-tight">
+            <span class="block text-xs uppercase tracking-[0.2em] text-green-100">Cart</span>
+            <span class="text-sm font-semibold"><span data-cart-count>{{ $floatingCartCount }}</span> items</span>
+        </span>
+    </a>
+@endif
 
 </x-app-layout>

@@ -3,63 +3,35 @@
 namespace App\Http\Controllers\Branch;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class BranchProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): View
     {
-        //
-    }
+        $branchId = auth()->user()->branch_id;
+        $categories = Category::query()->orderBy('name')->get(['id', 'name']);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $query = Product::query()
+            ->with([
+                'subcategory:id,name,category_id',
+                'subcategory.category:id,name',
+                'branchPrices' => fn ($branchPricesQuery) => $branchPricesQuery->where('branch_id', $branchId),
+            ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if ($request->filled('category')) {
+            $query->whereHas('subcategory', fn ($subcategoryQuery) => $subcategoryQuery->where('category_id', $request->category));
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $products = $query->latest()->paginate(12)->withQueryString();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('branch.products.index', compact('products', 'categories', 'branchId'));
     }
 }

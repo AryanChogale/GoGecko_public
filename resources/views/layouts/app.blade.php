@@ -272,11 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     const input = form.querySelector(".qty-input")
                     input.value = input.disabled ? input.value : 1
 
-                    const cartCount = document.getElementById("cart-count")
-
-                    if(cartCount){
-                        cartCount.textContent = parseInt(cartCount.textContent) + parseInt(formData.get("quantity"))
-                    }
+                    document.querySelectorAll("[data-cart-count]").forEach(cartCount => {
+                        const nextCount = parseInt(cartCount.textContent) + parseInt(formData.get("quantity"))
+                        cartCount.textContent = nextCount
+                    })
 
                 }
 

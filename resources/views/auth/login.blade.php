@@ -87,6 +87,10 @@
                 <div>
                     <div class="flex items-center justify-between mb-1">
                         <label class="block text-sm font-medium text-gray-700">Password</label>
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}"
+                               class="text-xs text-[#076807] hover:underline">Forgot password?</a>
+                        @endif
                     </div>
                     <input type="password" name="password" required autocomplete="current-password"
                            class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#076807] transition">

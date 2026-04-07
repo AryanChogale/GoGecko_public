@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\PriceChangeRequestController as AdminPriceChangeRequestController;
 use App\Http\Controllers\Branch\PriceChangeRequestController as BranchPriceChangeRequestController;
+use App\Http\Controllers\Branch\BranchProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +80,7 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
         Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+        Route::patch('/orders/{order}/assign-branch', [AdminOrderController::class, 'assignBranch'])->name('orders.assignBranch');
         Route::post('/orders/{order}/approve-cancellation', [AdminOrderController::class, 'approveCancellation'])->name('orders.approveCancellation');
         Route::post('/orders/{order}/reject-cancellation', [AdminOrderController::class, 'rejectCancellation'])->name('orders.rejectCancellation');
 
@@ -97,6 +99,7 @@ Route::middleware(['auth', 'role:branch'])
             return view('branch.dashboard');
         })->name('dashboard');
 
+        Route::get('products', [BranchProductController::class, 'index'])->name('products.index');
         Route::get('price-requests', [BranchPriceChangeRequestController::class, 'index'])->name('price-requests.index');
         Route::get('price-requests/create', [BranchPriceChangeRequestController::class, 'create'])->name('price-requests.create');
         Route::post('price-requests', [BranchPriceChangeRequestController::class, 'store'])->name('price-requests.store');

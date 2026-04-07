@@ -42,6 +42,12 @@ class Product extends Model
             return (float) $this->price;
         }
 
+        if ($this->relationLoaded('branchPrices')) {
+            $branchPrice = $this->branchPrices->firstWhere('branch_id', $branchId);
+
+            return $branchPrice ? (float) $branchPrice->price : (float) $this->price;
+        }
+
         $branchPrice = $this->branchPrices()
             ->where('branch_id', $branchId)
             ->first();
